@@ -10,6 +10,14 @@ function Header(){
   const[selectedDate, setSelectedDate] = useState(new Date());
   const[showCalendar, setShowCalendar] = useState(false);
 
+  //To drop down a menu for triple dots
+  const[showtdmenu, setShowtdmenu] = useState(null);
+
+  //function
+  const toggletdMenu = (id)=>{
+    setShowtdmenu(prevId => (prevId === id ? null : id));
+  }
+
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov","Dec"];
   //Function to setup formatted Date
   const formatDate = (dateObj)=>{
@@ -141,7 +149,7 @@ useEffect(() => {
             </form>
           
             </div>
-            <div className='horizontal2'></div>
+            
             <div className='listitem'>
               <ul>
                 {
@@ -157,7 +165,22 @@ useEffect(() => {
                       />
                       <div className='taskform'>
                         <span className='tasktext'>{t.text}</span>
-                        <img src='./tripledots.svg' className='tripledots'/>
+                        
+                        <img 
+                          src='./tripledots.svg' className='tripledots' 
+                          //Drop down menu for triple dots
+                          onClick={()=> toggletdMenu(t.id)}
+                          
+                        />
+                        { showtdmenu === t.id && (
+                              <ul className="tdMenu">
+                                <li>Mark Star</li>
+                                <li>Delete</li>
+                                <li>Edit</li>
+                              </ul>
+                          )
+                        }
+                        
                       </div>
                       
                     </li>
