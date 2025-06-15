@@ -211,7 +211,19 @@ li {
   z-index: 2;
 }
 
+.taskform.force-hover{
+  background-color: #60b4f0;
+  transform: scale(1.03);
+  z-index: 2;
+}
 
+/* Disable hover when another menu is open */
+.taskform.disable-hover:hover {
+  background-color: inherit;
+  transform: none;
+  z-index: 1;
+  cursor: default;
+}
 
 /* CHECKBOX */
 input[type="checkbox"] {
@@ -277,6 +289,14 @@ li:has(.tdMenu){
 
 .taskform:hover .tripledots {
   opacity: 1;
+}
+
+.taskform.force-hover .tripledots{
+  opacity: 1;
+}
+
+.taskform.disable-hover:hover .tripledots{
+  opacity: 0;
 }
 
 /* FIXED MENU POSITIONING */

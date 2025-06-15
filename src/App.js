@@ -9,6 +9,7 @@ function Header() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   const [showtdmenu, setShowtdmenu] = useState(null);
+  const [starredTasks, setStarredTasks] = useState([]);
   const menuRefs = useRef({});
   const sideBarRef = useRef(null);
    const menuButtonRef = useRef(null); // Add ref for menu button
@@ -110,9 +111,15 @@ function Header() {
   }
 
   //Marking a Star in the task
-  const addStar = (id) =>{
-    
-  }
+  const toggleStar = (id) => {
+    setStarredTasks(prev =>
+      prev.includes(id)
+        ? prev.filter(starId => starId !== id)
+        : [...prev, id]
+    );
+  };
+
+  
   return (
     <div className='body'>
       <div className='container'>
@@ -182,8 +189,15 @@ function Header() {
                         onChange={() => toggleTask(t.id)}
                         className='checkbox'
                       />
-                      <div className='taskform'>
+                      <div className={`taskform ${
+                        showtdmenu === t.id
+                          ? "force-hover"
+                          : showtdmenu !== null
+                          ? "disable-hover"
+                          : ""
+                      }`}>
                         <span className='tasktext'>{t.text}</span>
+                        {starredTasks.includes(t.id) && <span>⭐</span>}
                         <div className='dotsWrapper' ref={(el) => (menuRefs.current[t.id] = el)}>
                           <img
                             src='./tripledots.svg'
@@ -192,8 +206,8 @@ function Header() {
                           />
                           {showtdmenu === t.id && (
                             <ul className="tdMenu">
-                              <li onClick={()=>addStar(t.id)}>Important</li>
-                              <li onClick={()=>deleteTask(t.id)}>Delete</li>
+                              <li onClick={() => {toggleStar(t.id); setShowtdmenu(prev => (prev === t.id ? null : t.id))}}>{starredTasks.includes(t.id) ? "Remove Star" : "Add Star"}</li>
+                              <li onClick={() => deleteTask(t.id)}>Delete</li>
                               <li>Edit</li>
                             </ul>
                           )}
