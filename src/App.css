@@ -201,13 +201,18 @@ li {
   justify-content: space-between;
   padding: 5px;
   border: none;
-  border-radius: 5px;
-  transition: transform 0.3s ease-in-out;
+  transition: 
+    background-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  will-change: transform, background-color;
+  border-radius: 10px;
 }
 
 .taskform:hover {
   background-color: #60b4f0;
   transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 2;
 }
 
@@ -265,7 +270,6 @@ li:has(.tdMenu){
   height: 25px;
   width: 25px;
   margin-right: 3%;
-
   z-index: 10;
   overflow: visible;
 }
@@ -278,7 +282,7 @@ li:has(.tdMenu){
   border-radius: 10px;
   padding: 10%;
   margin-right: 1%;
-  transition: background-color 0.2s ease-in-out;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
   cursor: pointer;     /* ✅ Add cursor pointer */
   
 }
@@ -328,4 +332,61 @@ li:has(.tdMenu){
   word-break: normal;     /* ✅ Override inherited word-break */
   white-space: nowrap;    /* ✅ Keep menu items on single line */
   position: static;
+}
+
+/* All the CSS for editing of the task */
+
+.editModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 9999;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.editInput {
+  font-size: 16px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  resize: none;
+  height: 70px;
+  overflow-y: scroll; /* allow vertical scroll */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+/* Chrome, Safari and Edge */
+.editInput::-webkit-scrollbar {
+  display: none;
+}
+
+.editButtons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.editButtons button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.editButtons button:first-child {
+  background-color: #499be8;
+  color: white;
+}
+
+.editButtons button:last-child {
+  background-color: #f44336;
+  color: white;
 }

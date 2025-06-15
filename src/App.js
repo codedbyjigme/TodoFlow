@@ -10,6 +10,9 @@ function Header() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showtdmenu, setShowtdmenu] = useState(null);
   const [starredTasks, setStarredTasks] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editText, setEditText] = useState("");
+  const [editTaskId, setEditTaskId] = useState(null);
   const menuRefs = useRef({});
   const sideBarRef = useRef(null);
    const menuButtonRef = useRef(null); // Add ref for menu button
@@ -74,7 +77,7 @@ function Header() {
   // Handle calendar click from sidebar
   const handleCalendarClick = (e) => {
     e.stopPropagation();
-    setShowCalendar(true);
+    setShowCalendar(prev => !prev);
     setSideBar(false);
   };
 
@@ -108,6 +111,7 @@ function Header() {
   //Deleting The tasks
   const deleteTask = (id)=>{
     setSubmittedTask(prev => prev.filter(items => items.id !== id));
+    setShowtdmenu(null);
   }
 
   //Marking a Star in the task
@@ -119,7 +123,31 @@ function Header() {
     );
   };
 
-  
+  //editing a task
+  const editTask = (id) => {
+    const taskToEdit = submittedTask.find(t => t.id === id);
+    setEditText(taskToEdit.text);
+    setEditTaskId(id);
+    setShowEdit(true);
+    setShowtdmenu(null);
+  };
+
+  //handling the confirm and cancel
+  const handleConfirmEdit = () => {
+    setSubmittedTask(prev =>
+      prev.map(task =>
+        task.id === editTaskId ? { ...task, text: editText } : task
+      )
+    );
+    setShowEdit(false);
+    setEditTaskId(null);
+  };
+
+  const handleCancelEdit = () => {
+    setShowEdit(false);
+    setEditTaskId(null);
+  };
+
   return (
     <div className='body'>
       <div className='container'>
@@ -208,7 +236,7 @@ function Header() {
                             <ul className="tdMenu">
                               <li onClick={() => {toggleStar(t.id); setShowtdmenu(prev => (prev === t.id ? null : t.id))}}>{starredTasks.includes(t.id) ? "Remove Star" : "Add Star"}</li>
                               <li onClick={() => deleteTask(t.id)}>Delete</li>
-                              <li>Edit</li>
+                              <li onClick={() => {editTask(t.id); setShowtdmenu(prev => (prev === t.id ? null : t.id))}}>Edit</li>
                             </ul>
                           )}
                         </div>
@@ -219,6 +247,20 @@ function Header() {
             </div>
           </div>
         )}
+      {showEdit && (
+        <div className='editModal'>
+          <textarea
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            className='editInput'
+            autoFocus
+          />
+          <div className='editButtons'>
+            <button onClick={handleConfirmEdit}>Confirm</button>
+            <button onClick={handleCancelEdit}>Cancel</button>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
