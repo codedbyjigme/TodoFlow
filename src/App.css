@@ -3,6 +3,7 @@
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
 }
 
 /* BODY AND CONTAINER */
@@ -252,6 +253,7 @@ li:has(.tdMenu){
   height: 25px;
   width: 25px;
   margin-right: 3%;
+
   z-index: 10;
   overflow: visible;
 }
@@ -285,11 +287,12 @@ li:has(.tdMenu){
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   z-index: 1000;
-  top: 100%;  /* ✅ Position just below the dotsWrapper */
-  right: 0;          /* ✅ Better alignment */
+  top: 1%;  /* ✅ Position just below the dotsWrapper */
+  right: 50px;          /* ✅ Better alignment */
   width: 100px;
+  padding: 0;
   list-style: none;
-  margin: 0;              /* ✅ Remove all margins */
+  left: auto;
   min-width: 80px;    /* ✅ Small controlled gap */
 }
 
