@@ -210,9 +210,7 @@ li {
   z-index: 2;
 }
 
-.taskform:has(.tdMenu) {
-  transform: none !important;  /* Disable transform when menu is open */
-}
+
 
 /* CHECKBOX */
 input[type="checkbox"] {
@@ -255,10 +253,10 @@ li:has(.tdMenu){
   width: 25px;
   margin-right: 3%;
   z-index: 10;
+  overflow: visible;
 }
 
 .tripledots {
-  position: relative;
   height: 20px;
   width: 20px;
   opacity: 0;
@@ -268,6 +266,7 @@ li:has(.tdMenu){
   margin-right: 1%;
   transition: background-color 0.2s ease-in-out;
   cursor: pointer;     /* ✅ Add cursor pointer */
+  
 }
 
 .tripledots:hover {
@@ -284,18 +283,26 @@ li:has(.tdMenu){
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 5px 0;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   z-index: 1000;
-  top: 100%;           /* ✅ Changed from 120% to 100% */
-  right: 5px;         /* ✅ Better alignment */
+  top: 100%;  /* ✅ Position just below the dotsWrapper */
+  right: 0;          /* ✅ Better alignment */
   width: 100px;
   list-style: none;
-  margin-top: 2px;     /* ✅ Small controlled gap */
+  margin: 0;              /* ✅ Remove all margins */
+  min-width: 80px;    /* ✅ Small controlled gap */
 }
 
 .tdMenu li {
-  padding: 8px 12px;   /* ✅ Better spacing for menu items */
+  padding: 8px 12px;      /* ✅ Better spacing for menu items */
   cursor: pointer;
   font-size: 14px;
+  margin: 0 !important;   /* ✅ Override any inherited margins */
+  display: block;         /* ✅ Ensure block display */
+  width: auto;            /* ✅ Auto width */
+  min-height: auto;       /* ✅ Override inherited min-height */
+  flex-wrap: nowrap;      /* ✅ Override inherited flex-wrap */
+  word-break: normal;     /* ✅ Override inherited word-break */
+  white-space: nowrap;    /* ✅ Keep menu items on single line */
+  position: static;
 }
