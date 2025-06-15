@@ -9,7 +9,7 @@ function Header() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   const [showtdmenu, setShowtdmenu] = useState(null);
-  const menuRef = useRef(null);
+  const menuRefs = useRef({});
   const sideBarRef = useRef(null);
 
 
@@ -70,38 +70,41 @@ function Header() {
 
   useEffect(() => {
   const handleClickOutside = (event) => {
-    const clickedOutsideMenu = menuRef.current && !menuRef.current.contains(event.target);
-    const clickedOutsideSidebar = sideBarRef.current && !sideBarRef.current.contains(event.target);
+    setTimeout(()=>{
+      const ref = menuRefs.current[showtdmenu];
+      if (ref && !ref.contains(event.target)) {
+        setShowtdmenu(null);
+      }
+    
 
-    if (clickedOutsideMenu) {
-      setShowtdmenu(null);
-    }
+      const clickedOutsideSidebar = sideBarRef.current && !sideBarRef.current.contains(event.target);
 
-    if (clickedOutsideSidebar) {
-      setSideBar(false); // or your sidebar close logic
-    }
-  };
-
+      if (clickedOutsideSidebar) {
+        setSideBar(false); // or your sidebar close logic
+      }
+    },0);
+}
   document.addEventListener("mousedown", handleClickOutside);
   return () => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
-}, []);
+}, [showtdmenu]);
 
   return (
     <div className='body'>
       <div className='container'>
         <img src='/menu.svg'
           className='menu'
-          onClick={() => setSideBar(!sideBar)}
+          onClick={() => setSideBar(!sideBar)} 
+          ref={sideBarRef}
         />
-        <div className={`sideBar ${sideBar ? "open" : ''}`} ref={sideBarRef}>
+        <div className={`sideBar ${sideBar ? "open" : ''}`}>
           <h3>Menu</h3>
           <ul>
             <li style={{ cursor: "pointer" }}>
               <span onClick={() => {
-                setShowCalendar(!showCalendar);
-                setSideBar(false);
+                setShowCalendar(true);
+                setTimeout(() => setSideBar(false), 0);
               }}>Calender</span>
             </li>
             <li>Notes</li>
@@ -120,7 +123,7 @@ function Header() {
 
         <div className='horizontal1'></div>
 
-        {showCalendar && (
+        {showCalendar && <p>this is on</p> && (
           <div className='centered-calendar'>
             <Calendar
               onChange={(date) => {
@@ -160,7 +163,7 @@ function Header() {
                       />
                       <div className='taskform'>
                         <span className='tasktext'>{t.text}</span>
-                        <div className='dotsWrapper' ref={menuRef}>
+                        <div className='dotsWrapper' ref={(el) => (menuRefs.current[t.id] = el)}>
                           <img
                             src='./tripledots.svg'
                             className='tripledots'
