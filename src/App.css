@@ -288,7 +288,7 @@ li:has(.tdMenu){
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   z-index: 1000;
   top: 1%;  /* ✅ Position just below the dotsWrapper */
-  right: 50px;          /* ✅ Better alignment */
+  right: 60px;          /* ✅ Better alignment */
   width: 100px;
   padding: 0;
   list-style: none;

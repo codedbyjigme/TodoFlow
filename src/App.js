@@ -104,6 +104,15 @@ function Header() {
     };
   }, [showtdmenu, sideBar]); // Add sideBar to dependencies
 
+  //Deleting The tasks
+  const deleteTask = (id)=>{
+    setSubmittedTask(prev => prev.filter(items => items.id !== id));
+  }
+
+  //Marking a Star in the task
+  const addStar = (id) =>{
+    
+  }
   return (
     <div className='body'>
       <div className='container'>
@@ -183,8 +192,8 @@ function Header() {
                           />
                           {showtdmenu === t.id && (
                             <ul className="tdMenu">
-                              <li>Mark Star</li>
-                              <li>Delete</li>
+                              <li onClick={()=>addStar(t.id)}>Important</li>
+                              <li onClick={()=>deleteTask(t.id)}>Delete</li>
                               <li>Edit</li>
                             </ul>
                           )}
