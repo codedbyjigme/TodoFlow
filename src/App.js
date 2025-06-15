@@ -11,6 +11,7 @@ function Header() {
   const [showtdmenu, setShowtdmenu] = useState(null);
   const menuRefs = useRef({});
   const sideBarRef = useRef(null);
+   const menuButtonRef = useRef(null); // Add ref for menu button
 
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -68,44 +69,55 @@ function Header() {
     return date.toLocaleDateString('en-US', { weekday: 'long' });
   };
 
-  useEffect(() => {
-  const handleClickOutside = (event) => {
-    setTimeout(()=>{
-      const ref = menuRefs.current[showtdmenu];
-      if (ref && !ref.contains(event.target)) {
-        setShowtdmenu(null);
-      }
-    
 
-      const clickedOutsideSidebar = sideBarRef.current && !sideBarRef.current.contains(event.target);
-
-      if (clickedOutsideSidebar) {
-        setSideBar(false); // or your sidebar close logic
-      }
-    },0);
-}
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
+  // Handle calendar click from sidebar
+  const handleCalendarClick = (e) => {
+    e.stopPropagation();
+    setShowCalendar(true);
+    setSideBar(false);
   };
-}, [showtdmenu]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Handle triple dot menu
+      if (showtdmenu) {
+        const ref = menuRefs.current[showtdmenu];
+        if (ref && !ref.contains(event.target)) {
+          setShowtdmenu(null);
+        }
+      }
+
+      // Handle sidebar - only close if clicking outside both sidebar and menu button
+      if (sideBar) {
+        const clickedOutsideSidebar = sideBarRef.current && !sideBarRef.current.contains(event.target);
+        const clickedOutsideMenuButton = menuButtonRef.current && !menuButtonRef.current.contains(event.target);
+        
+        if (clickedOutsideSidebar && clickedOutsideMenuButton) {
+          setSideBar(false);
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showtdmenu, sideBar]); // Add sideBar to dependencies
 
   return (
     <div className='body'>
       <div className='container'>
-        <img src='/menu.svg'
+        <img 
+          src='/menu.svg'
           className='menu'
           onClick={() => setSideBar(!sideBar)} 
-          ref={sideBarRef}
+          ref={menuButtonRef} // Use separate ref for menu button
         />
-        <div className={`sideBar ${sideBar ? "open" : ''}`}>
+        <div className={`sideBar ${sideBar ? "open" : ''}`} ref={sideBarRef}>
           <h3>Menu</h3>
           <ul>
             <li style={{ cursor: "pointer" }}>
-              <span onClick={() => {
-                setShowCalendar(true);
-                setTimeout(() => setSideBar(false), 0);
-              }}>Calender</span>
+              <span onClick={handleCalendarClick}>Calendar</span>
             </li>
             <li>Notes</li>
           </ul>
@@ -123,7 +135,7 @@ function Header() {
 
         <div className='horizontal1'></div>
 
-        {showCalendar && <p>this is on</p> && (
+        {showCalendar && (
           <div className='centered-calendar'>
             <Calendar
               onChange={(date) => {
