@@ -152,7 +152,8 @@ function Header() {
     <div className='body'>
       <div className='container'>
         <img 
-          src='/menu.svg'
+          src='./menu.svg'
+          alt = 'menu'
           className='menu'
           onClick={() => setSideBar(!sideBar)} 
           ref={menuButtonRef} // Use separate ref for menu button
@@ -171,7 +172,8 @@ function Header() {
 
         <div className='top'>
           <h2>{getDayLabel(selectedDate)}</h2>
-          <img src='/calender.svg'
+          <img src='./calender.svg'
+            alt='calendar'
             onClick={() => setShowCalendar(!showCalendar)}
             style={{ cursor: "pointer" }} />
           <date id='date'>{formatDate(selectedDate)}</date>
@@ -196,7 +198,7 @@ function Header() {
             
               <div className='gate'>
                 <form onSubmit={handleSubmit} className='taskentry'>
-                  <button type='submit' className='submit'><img src='/plus.svg' /></button>
+                  <button type='submit' className='submit'><img src='./plus.svg' alt='insetion logo'/></button>
                   <input type="text"
                     placeholder=" + Add Task"
                     value={task}
