@@ -13,9 +13,12 @@ function Header() {
   const [showEdit, setShowEdit] = useState(false);
   const [editText, setEditText] = useState("");
   const [editTaskId, setEditTaskId] = useState(null);
+  const [showNotes, setShowNotes] = useState(null);
+
+
   const menuRefs = useRef({});
   const sideBarRef = useRef(null);
-   const menuButtonRef = useRef(null); // Add ref for menu button
+  const menuButtonRef = useRef(null); // Add ref for menu button
 
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -78,6 +81,12 @@ function Header() {
   const handleCalendarClick = (e) => {
     e.stopPropagation();
     setShowCalendar(prev => !prev);
+    setSideBar(false);
+  };
+
+  const handleNotesClick = (e) => {
+    e.stopPropagation();
+    setShowNotes(prev => !prev);
     setSideBar(false);
   };
 
@@ -152,8 +161,8 @@ function Header() {
     <div className='body'>
       <div className='container'>
         <img 
-          src='./menu.svg'
-          alt = 'menu'
+          src={`${process.env.PUBLIC_URL}/menu.svg`}
+          alt='menu'
           className='menu'
           onClick={() => setSideBar(!sideBar)} 
           ref={menuButtonRef} // Use separate ref for menu button
@@ -164,7 +173,9 @@ function Header() {
             <li style={{ cursor: "pointer" }}>
               <span onClick={handleCalendarClick}>Calendar</span>
             </li>
-            <li>Notes</li>
+            <li style={{ cursor: "pointer" }}>
+              <span onClick={handleNotesClick}>Notes</span>
+            </li>
           </ul>
         </div>
 
@@ -172,10 +183,12 @@ function Header() {
 
         <div className='top'>
           <h2>{getDayLabel(selectedDate)}</h2>
-          <img src='./calender.svg'
+          <img 
+            src={`${process.env.PUBLIC_URL}/calender.svg`}
             alt='calendar'
             onClick={() => setShowCalendar(!showCalendar)}
-            style={{ cursor: "pointer" }} />
+            style={{ cursor: "pointer" }}
+          />
           <date id='date'>{formatDate(selectedDate)}</date>
         </div>
 
@@ -193,12 +206,23 @@ function Header() {
           </div>
         )}
 
-        {!showCalendar && (
+        {showNotes && (
+          <div className = 'centered-notes'>
+
+          </div>
+        )}
+
+        {(!showCalendar) && (
           <div className='hiddenComponents'>
             
               <div className='gate'>
                 <form onSubmit={handleSubmit} className='taskentry'>
-                  <button type='submit' className='submit'><img src='./plus.svg' alt='insetion logo'/></button>
+                  <button type='submit' className='submit'>
+                    <img 
+                      src={`${process.env.PUBLIC_URL}/plus.svg`} 
+                      alt='insertion logo'
+                    />
+                  </button>
                   <input type="text"
                     placeholder=" + Add Task"
                     value={task}
@@ -230,7 +254,7 @@ function Header() {
                         {starredTasks.includes(t.id) && <span>⭐</span>}
                         <div className='dotsWrapper' ref={(el) => (menuRefs.current[t.id] = el)}>
                           <img
-                            src='./tripledots.svg'
+                            src={`${process.env.PUBLIC_URL}/tripledots.svg`}
                             className='tripledots'
                             onClick={() => toggletdMenu(t.id)}
                           />
@@ -263,6 +287,8 @@ function Header() {
           </div>
         </div>
       )}
+
+      
       </div>
     </div>
   );
